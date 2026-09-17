@@ -193,4 +193,252 @@ footer {
         grid-template-columns: 1fr;
         grid-auto-rows: auto;
     }
+
+@import url('https://fonts.googleapis.com/css?family=Sree+Krushnadevaraya&display=swap');
+
+:root {
+  --margin: 80px;
+  --background: #e2e2f5;
+  --perspective: 1800px;
+  --transition: transform 1s .2s, z-index 0s 0.5s;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Sree Krushnadevaraya', serif;
+}
+
+.pages {
+  width: calc(100% - var(--margin));
+  height: calc(100% - var(--margin));
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  perspective: var(--perspective);
+  box-shadow: 0 41px 38px -20px #0a3150;
+  max-width: 1300px;
+  max-height: 650px;
+}
+
+.pages input {
+  display: none;
+}
+
+/* ==============================
+   Base de cada página
+   ============================== */
+.pages_page {
+  width: 50%;
+  position: absolute;
+  right: 0;
+  height: 100%;
+  transform-origin: 0 50%;
+  pointer-events: none;
+  float: right;
+  transform-style: preserve-3d;
+}
+
+/* Empilhamento: página 1 no topo */
+.pages_page:nth-of-type(1) { z-index: 8; transition: var(--transition); }
+.pages_page:nth-of-type(2) { z-index: 7; transition: var(--transition); }
+.pages_page:nth-of-type(3) { z-index: 6; transition: var(--transition); }
+.pages_page:nth-of-type(4) { z-index: 5; transition: var(--transition); }
+.pages_page:nth-of-type(5) { z-index: 4; transition: var(--transition); }
+.pages_page:nth-of-type(6) { z-index: 3; transition: var(--transition); }
+.pages_page:nth-of-type(7) { z-index: 2; transition: var(--transition); }
+.pages_page:nth-of-type(8) { z-index: 1; transition: var(--transition); }
+
+/* Página 1 sempre visível */
+.pages_page:nth-of-type(1) {
+  left: 0;
+  z-index: 0;
+  transform: rotateY(0deg) !important;
+  pointer-events: none;
+}
+.pages_page:nth-of-type(1) .pages_page__inner {
+  transform: rotateY(0deg) !important;
+}
+
+.pages_page:nth-of-type(2) {
+  pointer-events: all;
+}
+
+/* Páginas ímpares = verso */
+.pages_page:nth-of-type(odd) .pages_page__inner {
+  transform: rotateY(180deg);
+}
+
+/* ==============================
+   Interior da página
+   ============================== */
+.pages_page__inner {
+  background: #fff;
+  height: 100%;
+  transform-style: preserve-3d;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
+}
+
+/* Lombada / sombra central */
+.pages_page__inner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.pages_page:nth-of-type(odd) .pages_page__inner::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(0,0,0,0.25), transparent);
+}
+
+.pages_page:nth-of-type(even) .pages_page__inner::after {
+  left: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.25), transparent);
+}
+
+/* ==============================
+   Conteúdo: apenas imagem
+   ============================== */
+.content {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.content_image {
+  position: absolute;
+  inset: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content_image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  border: 8px solid #fff;
+  border-bottom-width: 30px;
+  background: #fff;
+  transform: rotate(-1deg);
+  transition: transform .3s;
+}
+
+.content_image img:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* ==============================
+   Controles de navegação
+   ============================== */
+.control {
+  position: absolute;
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-radius: 100px;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 20px;
+  cursor: pointer;
+  transition: all .23s;
+  background: rgba(255,255,255,0.8);
+}
+
+.control:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.control.next {
+  left: auto;
+  right: 20px;
+}
+
+.control::after {
+  content: '\2039'; /* ‹ */
+  font-size: 28px;
+  line-height: 0;
+  position: absolute;
+  left: 13px;
+  top: 22px;
+  color: #333;
+}
+
+.control.next::after {
+  content: '\203A'; /* › */
+  left: 15px;
+}
+
+.control label {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+
+/* ==============================
+   Mecânica de virada de página
+   ============================== */
+
+/* --- Input #two (vira pág. 2/3) --- */
+#two:checked ~ .pages_page:nth-of-type(3) {
+  pointer-events: all;
+  transform: rotateY(-180deg);
+  z-index: 10;
+  transition: var(--transition);
+}
+#two:checked ~ .pages_page:nth-of-type(4) {
+  pointer-events: all;
+}
+#two:checked ~ .pages_page:nth-of-type(2) {
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* --- Input #three (vira pág. 4/5) --- */
+#three:checked ~ .pages_page:nth-of-type(5) {
+  pointer-events: all;
+  transform: rotateY(-180deg);
+  z-index: 10;
+  transition: var(--transition);
+}
+#three:checked ~ .pages_page:nth-of-type(6) {
+  pointer-events: all;
+}
+#three:checked ~ .pages_page:nth-of-type(4) {
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* --- Input #four (vira pág. 6/7) --- */
+#four:checked ~ .pages_page:nth-of-type(7) {
+  pointer-events: all;
+  transform: rotateY(-180deg);
+  z-index: 10;
+  transition: var(--transition);
+}
+#four:checked ~ .pages_page:nth-of-type(8) {
+  pointer-events: all;
+}
+#four:checked ~ .pages_page:nth-of-type(6) {
+  pointer-events: none;
+  z-index: 9;
+}
+    
 }
