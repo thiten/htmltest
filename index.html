@@ -1,150 +1,297 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sketchbook</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper App Clone</title>
+    <style>
+        /* --- Reset e Estilos Globais --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #6a6c8f; /* Cor de fundo baseada na imagem */
+            background-image: linear-gradient(135deg, #6a6c8f 0%, #4a4c6a 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            perspective: 1500px; /* Cria a profundidade 3D */
+        }
+
+        /* --- UI do Aplicativo (Topo e Base) --- */
+        .ui-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Deixa clicar através */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 20px;
+            z-index: 100;
+        }
+
+        .header {
+            text-align: center;
+            color: #fff;
+            opacity: 0.9;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            pointer-events: auto; /* Botoes precisam ser clicáveis */
+        }
+
+        .btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- O Caderno 3D --- */
+        .book-container {
+            position: relative;
+            width: 350px;
+            height: 500px;
+            transform-style: preserve-3d;
+            /* Centraliza e inclina levemente para dar realismo */
+            transform: rotateX(10deg) rotateY(-10deg);
+        }
+
+        /* Lombada / Capa Traseira */
+        .book-spine {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #c43a3a; /* Vermelho da capa */
+            border-radius: 5px 15px 15px 5px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.5);
+            transform: translateZ(-20px); /* Joga para trás */
+            z-index: 0;
+        }
+
+        /* Container das páginas */
+        .pages-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            left: 50%; /* Ponto de dobra no centro */
+            width: 50%; 
+        }
+
+        /* A Folha Individual */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%; /* Largura da metade */
+            height: 100%;
+            background-color: white;
+            transform-origin: left center; /* Rotaciona na borda esquerda */
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+            border-radius: 0 10px 10px 0;
+            box-shadow: inset 3px 0 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* Frente e Verso da folha */
+        .page-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Esconde o verso quando vira */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .page-front {
+            background: #fdfdfd;
+            z-index: 2;
+        }
+
+        .page-back {
+            background: #f4f4f4; /* Ligeiramente mais escuro no verso */
+            transform: rotateY(180deg); /* Vira para o lado certo */
+            z-index: 1;
+        }
+
+        /* Imagens dentro das páginas */
+        .page img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Estado da página virada */
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        /* Efeito de sombra dinâmica (opcional, para profundidade) */
+        .page::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+    </style>
 </head>
 <body>
 
-  <div class="pages">
-    <!-- Inputs controladores -->
-    <input type="radio" name="trigger" id="one">
-    <input type="radio" name="trigger" id="two">
-    <input type="radio" name="trigger" id="three">
-    <input type="radio" name="trigger" id="four">
-
-    <!-- Página 1 -->
-    <div class="pages_page">
-      <div class="pages_page__inner">
-        <div class="content">
-          <div class="content_image">
-            <img src="https://picsum.photos/id/1015/800/1000" alt="Sketch 1">
-          </div>
+    <!-- Interface (Título e Botões) -->
+    <div class="ui-layer">
+        <div class="header">
+            <h1>Journal</h1>
+            <p>✏️ Sketchbook</p>
         </div>
-        <div class="control next">
-          <label for="two"></label>
+        <div class="controls">
+            <button class="btn" onclick="prevPage()">❮</button>
+            <button class="btn" onclick="nextPage()">❯</button>
         </div>
-      </div>
     </div>
 
-    <!-- Página 2 -->
-    <div class="pages_page">
-      <div class="pages_page__inner">
-        <div class="content">
-          <div class="content_image">
-            <img src="https://picsum.photos/id/1016/800/1000" alt="Sketch 2">
-          </div>
+    <!-- O Livro -->
+    <div class="book-container" id="book">
+        <!-- Capa Traseira -->
+        <div class="book-spine"></div>
+        
+        <!-- Páginas -->
+        <div class="pages-wrapper" id="pagesWrapper">
+            <!-- As páginas serão injetadas aqui pelo JavaScript -->
         </div>
-        <div class="control">
-          <label for="one"></label>
-        </div>
-        <div class="control next">
-          <label for="three"></label>
-        </div>
-      </div>
     </div>
 
-    <!-- Página 3 -->
-    <div class="pages_page">
-      <div class="pages_page__inner">
-        <div class="content">
-          <div class="content_image">
-            <img src="https://picsum.photos/id/1018/800/1000" alt="Sketch 3">
-          </div>
-        </div>
-        <div class="control">
-          <label for="two"></label>
-        </div>
-        <div class="control next">
-          <label for="four"></label>
-        </div>
-      </div>
-    </div>
+    <script>
+        // Array de imagens (usei placeholders, mas você pode colocar suas URLs)
+        // Para melhores resultados, use imagens na proporção retrato (ex: 800x1200)
+        const images = [
+            "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1544323800-798bc2c78942?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1508614999368-9260051292e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1493225457124-a1a2a5f5646f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ];
 
-    <!-- Página 4 -->
-    <div class="pages_page">
-      <div class="pages_page__inner">
-        <div class="content">
-          <div class="content_image">
-            <img src="https://picsum.photos/id/1019/800/1000" alt="Sketch 4">
-          </div>
-        </div>
-        <div class="control">
-          <label for="three"></label>
-        </div>
-        <div class="control next">
-          <label for="five"></label>
-        </div>
-      </div>
-    </div>
+        const pagesWrapper = document.getElementById('pagesWrapper');
+        let currentPage = 0;
+        const totalPages = images.length;
 
-    <!-- Página 5 -->
-    <div class="pages_page">
-      <div class="pages_page__inner">
-        <div class="content">
-          <div class="content_image">
-            <img src="https://picsum.photos/id/1020/800/1000" alt="Sketch 5">
-          </div>
-        </div>
-        <div class="control">
-          <label for="four"></label>
-        </div>
-        <div class="control next">
-          <label for="six"></label>
-        </div>
-      </div>
-    </div>
+        // Função para criar as páginas dinamicamente
+        function createPages() {
+            // Invertemos o loop para criar as páginas de trás para frente no DOM,
+            // assim a página 1 fica no topo da pilha (z-index natural)
+            for (let i = totalPages - 1; i >= 0; i--) {
+                const page = document.createElement('div');
+                page.classList.add('page');
+                page.style.zIndex = totalPages - i; // Garante a ordem de empilhamento
 
-    <!-- Página 6 -->
-    <div class="pages_page">
-      <div class="pages_page__inner">
-        <div class="content">
-          <div class="content_image">
-            <img src="https://picsum.photos/id/1021/800/1000" alt="Sketch 6">
-          </div>
-        </div>
-        <div class="control">
-          <label for="five"></label>
-        </div>
-        <div class="control next">
-          <label for="seven"></label>
-        </div>
-      </div>
-    </div>
+                // Frente da página (Imagem)
+                const front = document.createElement('div');
+                front.classList.add('page-face', 'page-front');
+                const imgFront = document.createElement('img');
+                imgFront.src = images[i];
+                front.appendChild(imgFront);
 
-    <!-- Página 7 -->
-    <div class="pages_page">
-      <div class="pages_page__inner">
-        <div class="content">
-          <div class="content_image">
-            <img src="https://picsum.photos/id/1022/800/1000" alt="Sketch 7">
-          </div>
-        </div>
-        <div class="control">
-          <label for="six"></label>
-        </div>
-        <div class="control next">
-          <label for="eight"></label>
-        </div>
-      </div>
-    </div>
+                // Verso da página (Pode ser branco ou outra imagem)
+                const back = document.createElement('div');
+                back.classList.add('page-face', 'page-back');
+                // Exemplo: Colocando uma textura ou cor no verso
+                back.style.backgroundColor = '#f0f0f0'; 
+                
+                page.appendChild(front);
+                page.appendChild(back);
 
-    <!-- Página 8 -->
-    <div class="pages_page">
-      <div class="pages_page__inner">
-        <div class="content">
-          <div class="content_image">
-            <img src="https://picsum.photos/id/1023/800/1000" alt="Sketch 8">
-          </div>
-        </div>
-        <div class="control">
-          <label for="seven"></label>
-        </div>
-      </div>
-    </div>
-  </div>
+                // Evento de clique para virar a página individualmente
+                page.addEventListener('click', () => {
+                    if (page.classList.contains('flipped')) {
+                        page.classList.remove('flipped');
+                        currentPage--;
+                    } else {
+                        page.classList.add('flipped');
+                        currentPage++;
+                    }
+                });
 
+                pagesWrapper.appendChild(page);
+            }
+        }
+
+        // Controles de Avançar/Voltar
+        function nextPage() {
+            // Pega todas as páginas que ainda não foram viradas
+            const unflippedPages = document.querySelectorAll('.page:not(.flipped)');
+            if (unflippedPages.length > 0) {
+                // A última da lista (que está visualmente no topo) é a próxima a virar
+                const pageToFlip = unflippedPages[unflippedPages.length - 1];
+                pageToFlip.classList.add('flipped');
+            }
+        }
+
+        function prevPage() {
+            // Pega todas as páginas já viradas
+            const flippedPages = document.querySelectorAll('.page.flipped');
+            if (flippedPages.length > 0) {
+                // A primeira da lista (que está visualmente no topo do lado esquerdo) é a que volta
+                const pageToUnflip = flippedPages[0];
+                pageToUnflip.classList.remove('flipped');
+            }
+        }
+
+        // Inicializa
+        createPages();
+
+    </script>
 </body>
 </html>
