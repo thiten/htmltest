@@ -1,398 +1,233 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <link rel="icon" type="image/x-icon" href="favicon.png">
+   <link rel="icon" type="image/x-icon" href="favicon.png">
   
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YYNB3D0GK5"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-YYNB3D0GK5');
-    </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YYNB3D0GK5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
+  gtag('config', 'G-YYNB3D0GK5');
+</script>
+
+
+  
+</script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thiago Tenorio - Portfólio</title>
-    
-    <!-- Fontes e Ícones -->
+    <!-- Importando fonte limpa para o menu (semelhante à da imagem) -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Importando ícones para as redes sociais -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* =========================================
-           RESET E ESTILOS GLOBAIS
-           ========================================= */
-        * {
+      <link rel="stylesheet" href="styles.css">
+        /* Reset básico */
+        * 
+        a {
+    text-decoration: none;
+    color: inherit; /* Isso faz o link herdar a cor do texto ao redor, se quiser */
+}
+        
+        {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #ffffff;
             color: #333;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Remove barras de rolagem */
+            overflow-x: hidden; /* Evita rolagem horizontal devido às imagens */
         }
 
-        /* =========================================
-           CABEÇALHO (HEADER)
-           ========================================= */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 30px 60px;
-            z-index: 1000; /* Garante que fique acima do livro */
-            position: relative;
-            background: #fff;
-        }
+        /* Cabeçalho */
+       /* Cabeçalho - Padrão para DESKTOP (barra horizontal) */
+header {
+    display: flex;
+    justify-content: space-between; /* Logo na esquerda, menu na direita */
+    align-items: flex-start;
+    padding: 30px 60px;
+}
 
-        header img {
-            width: 150px;
-            height: auto;
-            margin-top: -5px;
-        }
+header img {
+    width: 150px;
+    height: auto;
+}
 
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
+nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
 
-        nav a {
-            color: #333;
-            transition: color 0.3s;
-        }
+nav a { text-decoration: none; color: #333; transition: color 0.3s; }
+     nav a:hover { color:#c7f14f; }
+        
+/* Responsividade para Celulares e Tablets */
+@media (max-width: 900px) {
+    /* Cabeçalho - Centralizado APENAS no mobile/tablet */
+    header {
+        flex-direction: column; 
+        align-items: center;    
+        justify-content: center;
+        padding: 20px;
+        gap: 15px;
+    }
 
-        nav a:hover {
-            color: #c7f14f;
-        }
+    header img {
+        width: 120px; 
+    }
 
-        .social-icons {
-            display: flex;
-            gap: 15px;
-        }
+    nav {
+        gap: 15px;
+        font-size: 0.7rem;
+        justify-content: center;
+        flex-wrap: wrap; 
+    }
 
+    main {
+        padding: 10px;
+    }
+
+    /* Aumenta a imagem principal em telas menores */
+    main img {
+        width: 100vw;       
+        max-width: 100vw;   
+    }
+}
         .social-icons a {
-            color: #C5F527;
+            color: #C5F527; /* Azul claro dos ícones */
             font-size: 1.2rem;
-            transition: color 0.3s;
         }
 
         .social-icons a:hover {
             color: #7aa0b5;
         }
 
-        /* =========================================
-           ÁREA PRINCIPAL (MAIN) - O LIVRO
-           ========================================= */
+        /* Área Principal (Ilustrações) */
         main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             position: relative;
-            perspective: 1500px; /* Cria a profundidade 3D */
-            background: radial-gradient(circle, #ffffff 0%, #fffff 100%);
-        }
-
-        /* --- Controles (Botões) --- */
-        .controls {
-            position: absolute;
-            bottom: 40px;
-            display: flex;
-            gap: 20px;
-            z-index: 100;
-        }
-
-        .btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            color: #333;
-            font-size: 20px;
-            cursor: pointer;
+            width: 100%;
+            height: calc(100vh - 120px); /* Altura restante da tela */
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.3s;
         }
 
-        .btn:hover {
-            background: #c7f14f;
-            color: #fff;
-            transform: scale(1.1);
-            border-color: #c7f14f;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        /* --- O Caderno 3D --- */
-        .book-container {
+        /* Container para as ilustrações (substitua o background-color pela sua imagem) */
+        .illustrations-container {
             position: relative;
-            width: 350px;
-            height: 500px;
-            transform-style: preserve-3d;
-            transform: rotateX(10deg) rotateY(-10deg);
-            transition: transform 0.5s;
-            margin-bottom: 40px; /* Espaço para os botões */
+            width: 80%;
+            max-width: 1200px;
+            height: 80%;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
         }
 
-        /* Lombada / Capa Traseira */
-        .book-spine {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width:  %;
-            height:  %;
-            background: #c43a3a;
-            border-radius: 5px 15px 15px 5px;
-            box-shadow: 5px 5px 20px rgba(0,0,0,0.3);
-            transform: translateZ(-20px);
-            z-index: 0;
-        }
-
-        /* Container das páginas */
-        .pages-wrapper {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            transform-style: preserve-3d;
-            left: 50%;
-        }
-
-        /* A Folha Individual */
-        .page {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 200%;
-            height: 100%;
-            background-color: white;
-            transform-origin: left center;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
-            border-radius: 0 10px 10px 0;
-            box-shadow: inset 3px 0 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        /* Frente e Verso da folha */
-        .page-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
+        /* Estilo dos placeholders das imagens */
+        .character {
+            width: 45%;
+            height: 80%;
+            background-color: #f4f4f4;
+            border: 2px dashed #ccc;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            color: #999;
+            font-size: 0.8rem;
+            text-align: center;
+            border-radius: 10px;
         }
 
-        .page-front {
-            background: #fdfdfd;
-            z-index: 2;
+      
         }
 
-        .page-back {
-            background: #f4f4f4;
-            transform: rotateY(180deg);
-            z-index: 1;
-        }
-
-        /* Imagens dentro das páginas */
-        .page img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Estado da página virada */
-        .page.flipped {
-            transform: rotateY(-180deg);
-        }
-
-        /* Efeito de sombra dinâmica */
-        .page::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 30px;
-            height: 100%;
-            background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        /* =========================================
-           RESPONSIVIDADE
-           ========================================= */
+        /* Responsividade básica */
         @media (max-width: 900px) {
             header {
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
+                gap: 20px;
                 padding: 20px;
-                gap: 15px;
             }
-
-            header img {
-                width: 120px;
-            }
-
+            
             nav {
-                gap: 15px;
-                font-size: 0.7rem;
-                justify-content: center;
                 flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
             }
 
-            .book-container {
-                transform: scale(0.8) rotateX(5deg);
-                margin-bottom: 60px;
-            }
+            .illustrations-container {
+                width: 90%;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+           
 
-            .controls {
-                bottom: 20px;
-            }
+
         }
+   
     </style>
+   <style>
+    .imagem-scale {
+        width: 300px;
+        height: 200px;
+        transform: scale(0.5);  /* Reduz para 50% */
+        transform-origin: top left; /* Origem da transformação */
+    }
+    
+    /* Ou com transição suave */
+    .imagem-scale-hover {
+        width: 300px;
+        height: auto;
+        transition: transform 0.3s ease;
+    }
+    
+    .imagem-scale-hover:hover {
+        transform: scale(0.8);  /* Reduz ao passar o mouse */
+    }
+</style>
+    
 </head>
 <body>
 
-    <!-- CABEÇALHO -->
     <header>
-        <img src="imagens/thiten.png" alt="Thiago Tenorio">
+      <img src="imagens/thiten.png" style="width: 32.7%; height: auto; margin-top: -5px">
+
         <nav>
             <a href="#">Home</a>
             <a href="https://thiten.github.io/portfolio/books">Books</a>
             <a href="https://thiten.github.io/portfolio/editorial">Editorial</a>
             <a href="https://thiten.github.io/portfolio/contact">Contact</a>
             
-            <div class="social-icons">
-                <a href="https://www.behance.net/thiago-tenrio" aria-label="Behance" target="_blank"><i class="fab fa-behance"></i></a>
-                <a href="https://www.instagram.com/thiago.tenorio_" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.linkedin.com/in/thiten/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <div class="social-icons">
+                <a href="https://www.behance.net/thiago-tenrio" aria-label="Behance" target='about blank'><i class="fab fa-behance"></i></a>
+                <a href="https://www.instagram.com/thiago.tenorio_" target="about blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/thiten/" target="about blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </nav>
     </header>
 
-    <!-- ÁREA PRINCIPAL COM O LIVRO -->
     <main>
-        <!-- Controles de Navegação -->
-        <div class="controls">
-            <button class="btn" onclick="prevPage()">❮</button>
-            <button class="btn" onclick="nextPage()">❯</button>
-        </div>
-
-        <!-- Estrutura do Livro 3D -->
-        <div class="book-container" id="book">
-            <div class="book-spine"></div>
-            <div class="pages-wrapper" id="pagesWrapper">
-                <!-- As páginas serão geradas pelo JavaScript -->
-            </div>
-        </div>
+     
+        
+    <img src="imagens/saltpepper.gif" alt="Imagem" width="700">
+                
+           
     </main>
 
-    <!-- SCRIPT DO LIVRO -->
-    <script>
-        // 1. CONFIGURAÇÃO DAS IMAGENS DO SEU SKETCHBOOK
-        // Substitua estas URLs pelos caminhos das suas imagens reais.
-        // Exemplo: "imagens/sketch1.jpg", "imagens/sketch2.jpg"
-        const images = [
-            "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1544323800-798bc2c78942?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1508614999368-9260051292e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1493225457124-a1a2a5f5646f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ];
-
-        const pagesWrapper = document.getElementById('pagesWrapper');
-        let currentPage = 0;
-        const totalPages = images.length;
-
-        // 2. CRIAÇÃO DINÂMICA DAS PÁGINAS
-        function createPages() {
-            // Loop invertido para empilhar corretamente no DOM
-            for (let i = totalPages - 1; i >= 0; i--) {
-                const page = document.createElement('div');
-                page.classList.add('page');
-                page.style.zIndex = totalPages - i;
-
-                // Frente (Imagem)
-                const front = document.createElement('div');
-                front.classList.add('page-face', 'page-front');
-                const imgFront = document.createElement('img');
-                imgFront.src = images[i];
-                imgFront.alt = "Sketchbook página " + (i + 1);
-                front.appendChild(imgFront);
-
-                // Verso (Fundo branco ou textura)
-                const back = document.createElement('div');
-                back.classList.add('page-face', 'page-back');
-                
-                page.appendChild(front);
-                page.appendChild(back);
-
-                // Clique individual para virar a página
-                page.addEventListener('click', () => {
-                    if (page.classList.contains('flipped')) {
-                        page.classList.remove('flipped');
-                        currentPage--;
-                    } else {
-                        page.classList.add('flipped');
-                        currentPage++;
-                    }
-                });
-
-                pagesWrapper.appendChild(page);
-            }
-        }
-
-        // 3. CONTROLES DE NAVEGAÇÃO (BOTÕES)
-        function nextPage() {
-            const unflippedPages = document.querySelectorAll('.page:not(.flipped)');
-            if (unflippedPages.length > 0) {
-                // A última da lista é a que está visualmente no topo
-                const pageToFlip = unflippedPages[unflippedPages.length - 1];
-                pageToFlip.classList.add('flipped');
-            }
-        }
-
-        function prevPage() {
-            const flippedPages = document.querySelectorAll('.page.flipped');
-            if (flippedPages.length > 0) {
-                // A primeira da lista é a que está visualmente no topo do lado esquerdo
-                const pageToUnflip = flippedPages[0];
-                pageToUnflip.classList.remove('flipped');
-            }
-        }
-
-        // Inicializa o livro
-        createPages();
-    </script>
 </body>
 </html>
